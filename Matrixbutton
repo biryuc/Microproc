@@ -1,0 +1,141 @@
+.include "m16def.inc"		
+.equ	Bit0	= 0b00000001
+.equ	Bit1	= 0b00000010
+.equ	Bit2	= 0b00000100
+.equ	Bit3	= 0b00001000
+.equ	Bit4	= 0b00010000
+.equ	Bit5	= 0b00100000
+.equ	Bit6	= 0b01000000
+.equ	Bit7	= 0b10000000
+
+.def 	Temp1 	= R16
+.def 	Temp2 	= R17
+.def 	Temp3 	= R18
+.def 	Temp4 	= R19
+
+.equ	LedDDR	= DDRD
+.equ	LedPORT	= PORTD	
+.equ	BtnPORT	= PORTA
+.equ	BtnPIN	= PINA
+.equ	BtnDDR	= DDRA				
+
+.cseg
+.org 0x00
+rjmp	reset			
+.org 0x12
+rjmp 	TIMER0_OVF
+
+TIMER0_OVF:
+	rcall 	Shift  
+reti
+
+reset:	
+	ldi 	Temp1, LOW(RAMEND)
+	out 	SPL, Temp1
+	ldi 	Temp1, HIGH(RAMEND)	
+	out 	SPH, Temp1
+	cli
+
+	ldi 	Temp1, 0xFF
+	out 	LedDDR, Temp1
+	ldi 	Temp1, 0b00111000
+	out 	BtnDDR, Temp1
+	clr 	Temp1
+	out 	BtnPORT, Temp1	
+
+	ldi 	Temp1, (1<<CS01)
+	out 	TCCR0, Temp1 
+
+	ldi		R26,0x0
+	ldi		R27,0x0
+	out  	TCNT0, R26
+	out  	OCR0,R27
+	ldi 	Temp1, (1<<TOIE0)
+	out 	TIMSK, Temp1
+	
+	sei
+
+
+Shift:
+	clr		Temp2
+Shift1:
+	LDI 	Temp1, 0b00011111
+	OUT 	BtnPORT, Temp1
+	IN		Temp3, BtnPIN
+	ANDI	Temp3, 0b00000111 
+	CPI 	Temp3, 0b00000110 
+	BRNE	Shift2
+	LDI		Temp2, Bit0
+	RJMP	ShiftEnd
+Shift2:
+	CPI 	Temp3, 0b00000101
+	BRNE	Shift3
+	LDI		Temp2, Bit1
+	RJMP	ShiftEnd
+Shift3:
+	CPI 	Temp3, 0b00000011
+	BRNE	Shift4
+	LDI		Temp2, Bit2
+	RJMP	ShiftEnd
+Shift4:
+	;clr     Temp1
+	;ldi 	Temp1, 0b00101000
+	;out 	BtnDDR, Temp1
+	LDI 	Temp1, 0b00101111
+	OUT 	BtnPORT, Temp1
+	IN		Temp3, BtnPIN
+	ANDI	Temp3, 0b00000111
+	CPI 	Temp3, 0b00000110
+	BRNE	Shift5
+	LDI		Temp2, Bit3
+	RJMP	ShiftEnd
+Shift5:
+	CPI 	Temp3, 0b00000101
+	BRNE	Shift6
+	LDI		Temp2, Bit4
+	RJMP	ShiftEnd
+Shift6:
+	CPI 	Temp3, 0b00000011
+	BRNE	Shift7
+	LDI		Temp2, Bit5
+	RJMP	ShiftEnd
+Shift7:
+	;clr     Temp1
+	;ldi 	Temp1, 0b00110000
+	;out 	BtnDDR, Temp1
+	LDI 	Temp1, 0b00110111
+	OUT 	BtnPORT, Temp1
+	IN		Temp3, BtnPIN
+	ANDI	Temp3, 0b00000111
+	CPI 	Temp3, 0b00000110
+	BRNE	Shift8
+	LDI		Temp2, Bit6
+	RJMP	ShiftEnd
+Shift8:
+	CPI 	Temp3, 0b00000101
+	BRNE	Shift9
+	LDI		Temp2, Bit7
+	RJMP	ShiftEnd
+Shift9:
+	CPI 	Temp3, 0b00000011
+	BRNE	ShiftEnd
+	LDI		Temp2, Bit0
+	RJMP	ShiftEnd
+ShiftEnd:
+	out 	LedPORT, Temp2
+	;call Delay
+ret
+
+
+Delay:
+ldi r16, 0xFF 
+ldi r17, 0xFF
+ldi r18, 0x05
+Delay_loop:
+subi r16,1 
+sbci r17,0 
+sbci r18,0
+brne Delay_loop 
+ret
+
+
