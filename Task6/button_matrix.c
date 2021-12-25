@@ -15,7 +15,7 @@ uint16_t btn_scan(){
 
 		res <<= 4;
 		res |= (~PIND & ROW_MASK) >> ROW_SHIFT;
-
+		_delay_ms(10);
 		DDRD &= ~(COL_MASK);
 		PORTD |= COL_MASK;
 	}

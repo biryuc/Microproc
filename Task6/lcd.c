@@ -10,7 +10,7 @@ void HD_Init(){
 	CTL_DDR = (1 << E_PIN) | (1 << RS_PIN) | (1 << RW_PIN);
 	
 	_delay_ms(20);
-	hd_cmd(0b00110000); //8-bit mode, 2 lines, 5*8 fronts
+	hd_cmd(0b00111000); //8-bit mode, 2 lines, 5*8 fronts
 	
 	hd_cmd(0x0F); // display ON, cursor ON, blink ON
 	//hd_cmd(0x06);//increase cursor possition
@@ -61,6 +61,10 @@ void cur_move(int steps){
 	for (int i = 0; i<steps; i++){
 		hd_cmd(0x14);
 	}
+}
+
+void cur_scdline(){
+	hd_cmd(0xC0); //на след. строку
 }
 
 void my_char(uint8_t* data){

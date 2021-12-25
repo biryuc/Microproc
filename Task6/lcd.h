@@ -25,5 +25,6 @@ void hd_data(uint8_t data);
 void lcd_print(uint8_t *data_array);
 void cur_move(int steps);
 void my_char(uint8_t* data);
+void cur_scdline();
 
 #endif /* LCD_H_ */

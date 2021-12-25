@@ -27,4 +27,7 @@ void LCD_start(void);
 void Change_figure_LCD(int count);
 void Winner(void);
 void Losing(void);
+void LCD_figure(int count);
+int Win(uint8_t *res,int rnd);
+void SPI_show(int num);
 #endif /* GUESS_THE_FIGURE_H_ */
