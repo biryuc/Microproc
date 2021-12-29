@@ -84,8 +84,9 @@ void Clear_SPI(){
 	}
 	
 }
-void Draw(uint8_t *picture){
-	_delay_ms(3500);
+void Draw(uint8_t *picture,int delay){
+	if(delay==0){_delay_ms(3500);}
+	else{_delay_ms(2000);}
 	for (int i=1;i<9;i++){
 		Sendto7219(i,picture[i-1]);
 	}
@@ -93,7 +94,7 @@ void Draw(uint8_t *picture){
 }
 
 
-void Change_figure(int num){
+void Change_figure(int num,int delay){
 	//int fi=0;
 	//if (start==1){
 	//	fi =Random_num();
@@ -102,46 +103,46 @@ void Change_figure(int num){
 		{
 		
 			case 1:
-			Draw(house);
+			Draw(house, delay);
 			Clear_SPI();
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			Clear_SPI();
-			Draw(snow);
+			Draw(snow, delay);
 			break;
 			case 2:
-			Draw(house);
+			Draw(house, delay);
 			Clear_SPI();
-			Draw(snow);
+			Draw(snow, delay);
 			Clear_SPI();
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			break;
 			case 3:
-			Draw(snow);
+			Draw(snow, delay);
 			Clear_SPI();
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			Clear_SPI();
-			Draw(house);
+			Draw(house, delay);
 			break;
 			case 4:
-			Draw(snow);
+			Draw(snow, delay);
 			Clear_SPI();
-			Draw(house);
+			Draw(house, delay);
 			Clear_SPI();
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			break;
 			case 5:
-			Draw(house);
+			Draw(house, delay);
 			Clear_SPI();
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			Clear_SPI();
-			Draw(snow);
+			Draw(snow, delay);
 			break;
 			case 6:
-			Draw(lattice_);
+			Draw(lattice_, delay);
 			Clear_SPI();
-			Draw(house);
+			Draw(house, delay);
 			Clear_SPI();
-			Draw(snow);
+			Draw(snow, delay);
 			break;
 		}
 		Clear_SPI();
@@ -156,24 +157,22 @@ uint8_t Read_score(){
 	return res[0];
 }
 
-void Start(int run_){
-	uint8_t res[1];
-	res[0]=Read_score();
+void Start(int run_,int delay){
+
 	lcd_clear();
 	Clear_SPI();
 	lcd_print(start_data);
 	cur_scdline();
-	//lcd_print(score);
+	
 	cur_move(1);
-	//lcd_print(res);
-	//lcd_print(zero_);
-	Draw(three);
+	
+	Draw(three, delay);
 	Clear_SPI();
-	Draw(two);
+	Draw(two, delay);
 	Clear_SPI();
-	Draw(one);
+	Draw(one, delay);
 	Clear_SPI();
-	Change_figure(run_);
+	Change_figure(run_, delay);
 	lcd_clear();
 	cur_home();
 }
@@ -208,26 +207,26 @@ uint8_t s_l_h_3[8]=   {0xA0,0x40,0xA0,0x14,0x1C,0x16,0x05,0x07};
 uint8_t s_h_l_4[8]=   {0xA0,0x40,0xA8,0x14,0x1C,0x05,0x07,0x05};
 uint8_t l_h_s_6[8]=   {0xA0,0xE0,0xA8,0x14,0x1C,0x05,0x02,0x05};
 	
-void SPI_show(int num){
+void SPI_show(int num,int delay){
 	switch ( num )
 	{
 		case 1:
-		Draw(h_l_s_1_5);
+		Draw(h_l_s_1_5, delay);
 		break;
 		case 2:
-		Draw(h_s_l_2);
+		Draw(h_s_l_2, delay);
 		break;
 		case 3:
-		Draw(s_l_h_3);
+		Draw(s_l_h_3, delay);
 		break;
 		case 4:
-		Draw(s_h_l_4);
+		Draw(s_h_l_4, delay);
 		break;
 		case 5:
-		Draw(h_l_s_1_5);
+		Draw(h_l_s_1_5, delay);
 		break;
 		case 6:
-		Draw(l_h_s_6);
+		Draw(l_h_s_6, delay);
 		break;
 	}
 }
@@ -281,7 +280,7 @@ void Change_figure_LCD(int count){
 	}
 	
 }
-
+/*
 void Winner(){
 	lcd_clear();
 	lcd_print(win);
@@ -328,4 +327,4 @@ int Win(uint8_t *res,int rnd){
 		break;
 	}
 	return win_;
-}
+}*/

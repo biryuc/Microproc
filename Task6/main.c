@@ -50,29 +50,40 @@ ISR(TIMER0_OVF_vect){
 	}
 }
 
-
+int del=0;
 
 int main(void){
 	
-	//init(MYUBRR);
-	Init_I2C();
-	//Timer_init();
+	
 	//HD_Init();
-	//btn_init();
+	//led_init();
+	uint8_t my_data[10] = {'0','1', '2', '3', '4', '5', '6', '7', '8','9'};
+	//lcd_print(my_data);
+	//Sendto7219(0x01,1);
+	
+	//init(MYUBRR);
+	//Init_I2C();
+	Timer_init();
+	HD_Init();
+	btn_init();
 	led_init();
 	sei();
 	uint8_t byte[8]={0x04 , 0x0E, 0x1F, 0x1F, 0x11, 0x11, 0x11, 0x1F};
 	uint8_t res_[8];
 	uint16_t addr = 0;
-	WriteByte_I2C(addr,byte);
+	/*WriteByte_I2C(addr,byte);
 	_delay_ms(300);
 	ReadByte_I2C(addr,res_);
-	Draw(res);
-	/*while(1){
+	Draw(res);*/
+	
+	while(1){
 		if(random_flag==1){
+			
 			//srand(time(NULL));
 			random_num=rand()%6+1;
-			Start(random_num);
+			Start(random_num,del);
+			del++;
+			if (del==2){del=0;}
 			LCD_start();
 			random_flag=0;
 		}
@@ -80,7 +91,7 @@ int main(void){
 			counter++;
 			Clear_SPI();
 			//LCD_figure(counter);
-			SPI_show(counter);
+			SPI_show(counter,del);
 		
 			if(counter==6){
 				counter=0;
@@ -99,6 +110,6 @@ int main(void){
 			enter_flag=0;
 			
 		}
-	}*/
+	}
 }
 
