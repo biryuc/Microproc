@@ -86,7 +86,9 @@ void Clear_SPI(){
 }
 void Draw(uint8_t *picture,int delay){
 	if(delay==0){_delay_ms(3500);}
-	else{_delay_ms(2000);}
+	else if(delay==1){_delay_ms(2000);}
+	else if(delay==2){_delay_ms(3500);}
+	else if(delay==3){_delay_ms(2000);}
 	for (int i=1;i<9;i++){
 		Sendto7219(i,picture[i-1]);
 	}
@@ -157,7 +159,7 @@ uint8_t Read_score(){
 	return res[0];
 }
 
-void Start(int run_,int delay){
+void Start(int run_,int delay,int flag){
 
 	lcd_clear();
 	Clear_SPI();
@@ -172,7 +174,8 @@ void Start(int run_,int delay){
 	Clear_SPI();
 	Draw(one, delay);
 	Clear_SPI();
-	Change_figure(run_, delay);
+	if(flag==0){Change_figure(run_, delay);}
+	else{Change_figure_level3(run_, 0);}
 	lcd_clear();
 	cur_home();
 }
@@ -280,51 +283,103 @@ void Change_figure_LCD(int count){
 	}
 	
 }
-/*
-void Winner(){
-	lcd_clear();
-	lcd_print(win);
-}
-void Losing(){
-	lcd_clear();
-	lcd_print(lose);	
-}
-//house-1   lattice-2  snow-3
-int Win(uint8_t *res,int rnd){
-	int win_=0;
-	switch ( rnd )
+uint8_t tree[8]={0x10,0x28,0x28,0x44,0x7C,0x28,0x44,0xFE};
+
+void Change_figure_level3(int num,int delay){
+	
+	
+	switch ( num )
 	{
 		
 		case 1:
-		if(res[0]==1 && res[1]==2 && res[2]==3){
-			win_=1;
-		}
+		Draw(house, delay);
+		Clear_SPI();
+		Draw(lattice_, delay);
+		Clear_SPI();
+		Draw(snow, delay);
+		Clear_SPI();
+		Draw(tree,delay);
 		break;
 		case 2:
-		if(res[0]==1 && res[1]==3 && res[2]==2){
-			win_=1;
-		}
+		
+		Draw(tree,delay);
+		Clear_SPI();
+		Draw(house, delay);
+		Clear_SPI();
+		Draw(snow, delay);
+		Clear_SPI();
+		Draw(lattice_, delay);
 		break;
 		case 3:
-		if(res[0]==3 && res[1]==2 && res[2]==1){
-			win_=1;
-		}
+		Draw(snow, delay);
+		Clear_SPI();
+		Draw(lattice_, delay);
+		Clear_SPI();
+		Draw(tree,delay);
+		Clear_SPI();
+		Draw(house, delay);
 		break;
 		case 4:
-		if(res[0]==3 && res[1]==1 && res[2]==2){
-			win_=1;
-		}
+		Draw(tree,delay);
+		Clear_SPI();
+		Draw(snow, delay);
+		Clear_SPI();
+		Draw(lattice_, delay);
+		Clear_SPI();
+		Draw(house, delay);
+		
 		break;
 		case 5:
-		if(res[0]==1 && res[1]==2 && res[2]==3){
-			win_=1;
-		}
+		Draw(house, delay);
+		Clear_SPI();
+		Draw(lattice_, delay);
+		Clear_SPI();
+		Draw(tree,delay);
+		Clear_SPI();
+		Draw(snow, delay);
 		break;
 		case 6:
-		if(res[0]==2 && res[1]==1 && res[2]==3){
-			win_=1;
-		}
+		Draw(lattice_, delay);
+		Clear_SPI();
+		Draw(house, delay);
+		Clear_SPI();
+		Draw(snow, delay);
+		Clear_SPI();
+		Draw(tree,delay);
 		break;
 	}
-	return win_;
-}*/
+	Clear_SPI();
+	//}
+	
+	
+}
+uint8_t h_l_s_t_1[8]={0xA8,0xE8,0xAC,0x00,0xDC,0x88,0x48,0xC8};
+uint8_t t_h_s_l_2[8]={0xEA,0x4E,0x4A,0x00,0xC8,0x88,0x48,0xCC};	
+uint8_t s_l_t_h_3[8]={0xD0,0x90,0x50,0xD8,0x00,0xEA,0x4E,0x4A};
+uint8_t t_s_l_h_4[8]={0xE6,0x44,0x42,0x46,0x00,0x8A,0x8E,0xCA};
+uint8_t h_l_t_s_5[8]={0xA8,0xE8,0xAC,0x00,0xEC,0x48,0x44,0x4C};
+uint8_t l_h_s_t_6[8]={0x8A,0x8E,0xCA,0x00,0xCE,0x84,0x44,0xC4};
+
+void SPI_show_level3(int num,int delay){
+	switch ( num )
+	{
+		case 1:
+		Draw(h_l_s_t_1, delay);
+		break;
+		case 2:
+		Draw(t_h_s_l_2, delay);
+		break;
+		case 3:
+		Draw(s_l_t_h_3, delay);
+		break;
+		case 4:
+		Draw(t_s_l_h_4, delay);
+		break;
+		case 5:
+		Draw(h_l_t_s_5, delay);
+		break;
+		case 6:
+		Draw(l_h_s_t_6, delay);
+		break;
+	}
+}

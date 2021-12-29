@@ -30,5 +30,7 @@ void Losing(void);
 void LCD_figure(int count);
 int Win(uint8_t *res,int rnd);
 void SPI_show(int num,int delay);
-void Start(int run_,int delay);
+void Start(int run_,int delay,int flag);
+void SPI_show_level3(int num,int delay);
+void Change_figure_level3(int num,int delay);
 #endif /* GUESS_THE_FIGURE_H_ */
