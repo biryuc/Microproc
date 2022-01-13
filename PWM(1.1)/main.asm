@@ -26,15 +26,15 @@ ldi temp,255
 out ocr0,temp 
 
 ldi temp,85 
-out OCR1AH,temp ;Output Compare Register 1 A –1/3 period
+out OCR1AH,temp 
 ldi temp,0
-out OCR1AL,temp ;Output Compare Register 1 A –
+out OCR1AL,temp 
 
-ldi temp, (1<<WGM12)|(1<<CS10) ;no prescaling 
-out tccr1b,temp ;control registr
+ldi temp, (1<<WGM12)|(1<<CS10) 
+out tccr1b,temp
 
 ldi temp,(1<<OCIE1A)
-out TIMSK,temp ;Interrupt Enable
+out TIMSK,temp 
 
 
 Enable_interrupt:
