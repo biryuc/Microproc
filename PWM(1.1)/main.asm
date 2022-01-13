@@ -19,11 +19,11 @@ sbi DDRB,3  ;on out
 
 start:
 sbi PORTB,3  ;Port B Data Register
-ldi temp,(1<<WGM00)|(1<<WGM01)|(1<<COM01)|(0<<COM00)|(1<<CS00)|(0<<CS01)|(0<<CS02) ;FAST PWM wthout prescalling and clear on compare
-out tccr0,temp ;Timer/Counter Control
+ldi temp,(1<<WGM00)|(1<<WGM01)|(1<<COM01)|(0<<COM00)|(1<<CS00)|(0<<CS01)|(0<<CS02) 
+out tccr0,temp 
 
 ldi temp,255	
-out ocr0,temp ;Output Compare Register   (выставляет прерывания в 12 адрес) 
+out ocr0,temp 
 
 ldi temp,85 
 out OCR1AH,temp ;Output Compare Register 1 A –1/3 period
